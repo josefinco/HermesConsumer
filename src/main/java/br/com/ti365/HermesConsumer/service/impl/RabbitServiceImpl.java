@@ -20,13 +20,10 @@ public class RabbitServiceImpl implements RabbitService {
 	public Channel connectionFactory(ConnectionFactory factory) {
 		try {
 			log.info("Criando o objeto Rabbit ConnectionFactory");
-			
 			factory = propertyService.loadRabbitProperties(factory, properties);
-			
-			log.info("Conexão com o Server RabbitMq estabelecida com sucesso");
-
 			Connection connection = factory.newConnection();
 			Channel channel = connection.createChannel();
+			log.info("Conexão com o Server RabbitMq estabelecida com sucesso");
 			channel.queueDeclare(queue, true, false, false, null);
 			log.info(" [*] Conexões abertas para publicação de mensagens.");
 			return channel;

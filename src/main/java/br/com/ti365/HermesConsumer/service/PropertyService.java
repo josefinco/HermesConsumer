@@ -19,6 +19,6 @@ public interface PropertyService {
 	 /*
 	  * Get rabbitMQ Factory with properties parameters injected
 	  */
-	 ConnectionFactory loadRabbitProperties(Properties properties);
+	 ConnectionFactory loadRabbitProperties(ConnectionFactory factory, Properties properties);
 	
 }

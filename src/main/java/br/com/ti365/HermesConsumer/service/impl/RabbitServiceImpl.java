@@ -20,11 +20,9 @@ public class RabbitServiceImpl implements RabbitService {
 	public Channel connectionFactory(ConnectionFactory factory) {
 		try {
 			log.info("Criando o objeto Rabbit ConnectionFactory");
-			factory.setHost(properties.getProperty("rabbitmq.host"));
-			factory.setUsername(properties.getProperty("rabbitmq.username"));
-			factory.setPassword(properties.getProperty("rabbitmq.password"));
-			factory.setPort(Integer.parseInt(properties.getProperty("rabbitmq.port")));
-			factory.setVirtualHost(properties.getProperty("rabbitmq.virtualhost"));
+			
+			factory = propertyService.loadRabbitProperties(factory, properties);
+			
 			log.info("Conexão com o Server RabbitMq estabelecida com sucesso");
 
 			Connection connection = factory.newConnection();

@@ -45,8 +45,15 @@ public class PropertyServiceImpl implements PropertyService {
 		return kafkaProp;
 	}
 
-	public ConnectionFactory loadRabbitProperties(Properties properties) {
+
+	public ConnectionFactory loadRabbitProperties(ConnectionFactory factory, Properties properties) {
 		
-		return null;
+		factory.setHost(properties.getProperty("rabbitmq.host"));
+		factory.setUsername(properties.getProperty("rabbitmq.username"));
+		factory.setPassword(properties.getProperty("rabbitmq.password"));
+		factory.setPort(Integer.parseInt(properties.getProperty("rabbitmq.port")));
+		factory.setVirtualHost(properties.getProperty("rabbitmq.virtualhost"));
+		return factory;
 	}
+
 }

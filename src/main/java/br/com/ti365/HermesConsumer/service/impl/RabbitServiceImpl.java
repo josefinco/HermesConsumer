@@ -7,28 +7,26 @@ import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 
-import br.com.ti365.HermesConsumer.service.RabbitConnectionService;
+import br.com.ti365.HermesConsumer.service.RabbitService;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-public class RabbitConnectionServiceImpl implements RabbitConnectionService {
+public class RabbitServiceImpl implements RabbitService {
 
 	private PropertyServiceImpl propertyService = new PropertyServiceImpl();
-	Properties properties = propertyService.loadProperties();
-	String queue = properties.getProperty("rabbitmq.queue");
+	Properties properties = propertyService.loadFileProperties();
+	private String queue = properties.getProperty("rabbitmq.queue");
 
-	public Channel connectionFactory() {
+	public Channel connectionFactory(ConnectionFactory factory) {
 		try {
-			log.info("Criando o objeto ConnectionFactory");
-			ConnectionFactory factory = new ConnectionFactory();
+			log.info("Criando o objeto Rabbit ConnectionFactory");
 			factory.setHost(properties.getProperty("rabbitmq.host"));
 			factory.setUsername(properties.getProperty("rabbitmq.username"));
 			factory.setPassword(properties.getProperty("rabbitmq.password"));
 			factory.setPort(Integer.parseInt(properties.getProperty("rabbitmq.port")));
 			factory.setVirtualHost(properties.getProperty("rabbitmq.virtualhost"));
-//			factory.useSslProtocol();
+			log.info("Conexão com o Server RabbitMq estabelecida com sucesso");
 
-			log.info("Conexão estabelecida com sucesso");
 			Connection connection = factory.newConnection();
 			Channel channel = connection.createChannel();
 			channel.queueDeclare(queue, true, false, false, null);
@@ -41,10 +39,9 @@ public class RabbitConnectionServiceImpl implements RabbitConnectionService {
 	}
 
 	public void publish(Channel channel, String message) {
-
 		try {
 			channel.basicPublish("", queue, null, message.getBytes());
-			System.out.println(" Mensagem publicada: " + message);
+			log.info("[ * ] Mensagem publicada na fila Rabbit: \n" + message);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

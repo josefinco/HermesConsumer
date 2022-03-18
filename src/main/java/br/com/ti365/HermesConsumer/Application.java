@@ -11,8 +11,8 @@ import br.com.ti365.HermesConsumer.service.impl.RabbitServiceImpl;
 public class Application {
 
 	public static void main(String[] args) {
-		RabbitService rabbitmq = new RabbitServiceImpl();
 		POMKafkaService consumirdorEventoKafka = new POMKafkaServiceImpl();
+		RabbitService rabbitmq = new RabbitServiceImpl();
 		Channel rabbitMQChannel= rabbitmq.connectionFactory(new ConnectionFactory());
 		consumirdorEventoKafka.startConsumerKafka(rabbitMQChannel);
 
